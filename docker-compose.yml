@@ -1,0 +1,33 @@
+version: '3'
+services:
+  prisma:
+    image: prismagraphql/prisma:2
+    restart: always
+    ports:
+      - '4466:4466'
+    environment:
+      PRISMA_DATABASE_URL:postgresql://postgres:123456@localhost:5432/forum?schema=public
+    volumes:
+      - ./prisma:/prisma
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - prisma
+    volumes:
+      - .:/app

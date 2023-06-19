@@ -40,7 +40,6 @@ export function UserProvider(props: Typprops) {
             email: email,
             password: senha
         })
-        console.log(resquest)
         if (resquest && resquest.ok) {
             if (resquest) {
                 return resquest

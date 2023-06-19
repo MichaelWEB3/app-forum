@@ -62,7 +62,9 @@ export default function AdminLogin() {
                                 underlined
                                 clearable
                                 placeholder="Nome"
-                                color="primary" />
+                                color="primary"
+                                className="testname"
+                                />
 
                         </div>
                         <div className='mb-10 w-full flex  space-x-2'>
@@ -73,7 +75,10 @@ export default function AdminLogin() {
                                 underlined
                                 clearable
                                 placeholder="Email"
-                                color="primary" />
+                                color="primary" 
+                                className='testemail'
+
+                                />
                         </div>
                         <div className='mb-10 w-full flex  space-x-2'>
 
@@ -84,7 +89,9 @@ export default function AdminLogin() {
                                 underlined
                                 clearable
                                 placeholder="Senha"
-                                color="primary" />
+                                color="primary"
+                                className='testpassword'
+                                />
                         </div>
 
 

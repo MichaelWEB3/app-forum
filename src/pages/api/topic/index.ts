@@ -20,6 +20,10 @@ async function methodGet(req: NextApiRequest, res: NextApiResponse) {
                     }
                 }
             }
+            ,
+            orderBy:{
+                dateTime:"desc"
+            }
         }).then(r => res.status(200).json({ message: `sucesso`, status: true, topics: r }))
     } catch (e) {
         res.status(405).json({ message: `error ao pegar topico`, status: false })

@@ -10,11 +10,11 @@ export default function AdminLogin() {
     const HookDados = useDados()
     async function handlerLogin() {
         const request: any = await HookDados?.handlerLogin(email, password)
-    
+
         if (request) {
             notify("Login feito com sucesso")
             Router.push("/feed")
-        }else{
+        } else {
             notify2("Erro ao fazer login! Verifique email ou senha.")
         }
 
@@ -47,6 +47,7 @@ export default function AdminLogin() {
                         <h1 className=' font-semibold text-2xl  text-gray-500 mb-10'>Login</h1>
                         <div className='mb-10 w-full'>
                             <Input
+                                id='testemail'
                                 width='100%'
                                 underlined
                                 clearable
@@ -58,6 +59,7 @@ export default function AdminLogin() {
                         </div>
                         <div className='w-full mb-10'>
                             <Input.Password
+                                id='testpassword'
                                 value={password}
                                 onChange={(e) => setpassword(e.target.value)}
                                 width='100%'
@@ -68,15 +70,20 @@ export default function AdminLogin() {
                         </div>
 
 
-                        <Button onClick={() => {
-                            handlerLogin()
-                        }} shadow color="primary" auto>
+                        <Button
+                            onClick={() => {
+                                handlerLogin()
+                            }} shadow
+                            color="primary"
+                            auto
+                            id="buttonLogin"
+                        >
                             Login
                         </Button>
                         <div className='flex  justify-end w-full'>
                             <span onClick={() => {
                                 Router.push("/create")
-                            }} className=' cursor-pointer text-black'>Criar conta</span>
+                            }} id="criar" className=' cursor-pointer text-black'>Criar conta</span>
                         </div>
                     </div>
                 </div>

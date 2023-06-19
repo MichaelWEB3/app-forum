@@ -5,22 +5,23 @@ import CardComentario from './cardComentario'
 import { Textarea, Button } from "@nextui-org/react";
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 type Typeprops = {
     info?: any
+    getTOpics?: any
 }
-export default function CardPost({ info }: Typeprops) {
+export default function CardPost({ info, getTOpics }: Typeprops) {
     const [description, setdescription] = useState("")
     const { data: session, } = useSession()
 
     const formatData = (datast: string) => {
         const data = new Date(datast);
-
         // Formatar a data de acordo com o formato desejado (por exemplo, "dd/mm/aaaa hh:mm")
         return `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()} ${data.getHours()}:${data.getMinutes()}`;
 
     }
-    const handlerCreatTopic = async () => {
+    const handlerCemt = async () => {
         try {
             const request = await axios.post("/api/protected/comment", {
                 topicsId: info.id,
@@ -32,6 +33,8 @@ export default function CardPost({ info }: Typeprops) {
                 }
             })
             if (request?.data?.status) {
+                getTOpics('/api/topic')
+                notify('Comentado com sucesso!')
                 setdescription("")
             }
         } catch (e) {
@@ -39,8 +42,23 @@ export default function CardPost({ info }: Typeprops) {
         }
 
     }
+    const notify = (text: string) => toast.success(text);
+    const notify2 = (text: string) => toast.error(text);
+
     return (
         <div className="w-10/12  border-t p-5   items-center border-gray-300/50 mt-5 mb-5 flex flex-col bg-gray-200">
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <div className="w-full flex border-b border-gray-300 flex-row h-36 rounded p-2 ">
                 <div className="w-3/12">
                     <div className="flex flex-row m-0" >
@@ -69,7 +87,7 @@ export default function CardPost({ info }: Typeprops) {
             <div className='w-full'>
                 <Textarea
                     width='100%'
-                    className='w-full'
+                    className='w-full comment'
                     value={description}
                     onChange={(text) => setdescription(text.target.value)}
                     label="Comentario"
@@ -77,7 +95,9 @@ export default function CardPost({ info }: Typeprops) {
                 />
                 <div className='flex flex-end'>
                     <Button
-                        onClick={() => handlerCreatTopic()}
+                        id="buttonEnvoarComent"
+
+                        onClick={() => handlerCemt()}
                         className="mt-5 mb-5 w-32" iconRight>
                         Enviar
                     </Button>
@@ -92,7 +112,7 @@ export default function CardPost({ info }: Typeprops) {
                     )
                 })}
 
-       
+
             </div>
         </div>
     )

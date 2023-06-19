@@ -14,11 +14,13 @@ export default function Feed() {
   const { data: session, } = useSession()
   const [title, setitlte] = useState("")
   const [description, setdescription] = useState("")
+  const [topics, settopics] = useState<Array<any>>([])
   const getTOpics = async (url: any) => {
     try {
       const request = await axios.get(url)
       if (request.data.status) {
-        return request.data
+        settopics(request.data.topics)
+        return request.data.topics
       }
     } catch (e) {
       throw error;
@@ -26,7 +28,6 @@ export default function Feed() {
     }
   }
   const { data, error } = useSWR('/api/topic', getTOpics);
-  console.log(data?.topics)
   const handlerCreatTopic = async () => {
     try {
       const request = await axios.post("/api/protected/topic", {
@@ -40,6 +41,7 @@ export default function Feed() {
         }
       })
       if (request?.data?.status) {
+        getTOpics('/api/topic')
         setitlte("")
         setdescription("")
         notify("Postado com sucesso")
@@ -47,10 +49,11 @@ export default function Feed() {
     } catch (e) {
       await signOut()
     }
-
   }
 
-
+  useEffect(() => {
+    if (data) settopics(data)
+  }, [data])
 
   const notify = (text: string) => toast.success(text);
   const notify2 = (text: string) => toast.error(text);
@@ -78,6 +81,7 @@ export default function Feed() {
             value={title}
             onChange={(text) => setitlte(text.target.value)}
             clearable
+            id="title"
             label="Seu assunto"
             placeholder="Digite seu assunto"
           />
@@ -86,10 +90,12 @@ export default function Feed() {
             value={description}
             onChange={(text) => setdescription(text.target.value)}
             label="Mensagem"
+            id="describe"
             placeholder="Digite sua mensagem"
           />
           <div className="w-full flex  justify-end">
             <Button
+              id="buttonEnvoarPost"
               onClick={() => handlerCreatTopic()}
               className="mt-5 w-32" iconRight>
               Enviar
@@ -99,9 +105,9 @@ export default function Feed() {
       </div>
 
       <div className="w-full flex flex-col  items-center justify-center">
-        {data?.topics?.length > 0 && data?.topics?.map((r: any, i: any) => {
+        {topics?.length > 0 && topics?.map((r: any, i: any) => {
           return (
-            <CardPost key={i} info={r} />
+            <CardPost getTOpics={getTOpics} key={i} info={r} />
           )
         })}
       </div>
